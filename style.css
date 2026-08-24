@@ -1,0 +1,912 @@
+:root {
+  --bg: #090a0c;
+  --card: #111318;
+  --card-hover: #151820;
+
+  --text: #f2f3f5;
+  --muted: #9b9fa8;
+  --subtle: #686d78;
+
+  --line: #505055;
+
+  --accent: #b7f34a;
+
+  --max-width: 1080px;
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+
+  font-family: "DM Sans", sans-serif;
+
+  line-height: 1.6;
+
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: var(--accent);
+  color: #000;
+}
+
+
+/* =========================================================
+   NEURAL NETWORK CANVAS
+   ========================================================= */
+
+#neural-bg {
+  position: fixed;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  z-index: -3;
+
+  pointer-events: none;
+}
+
+
+/*
+  Dark overlay above the neural network.
+
+  This is important because it makes the network
+  visible without allowing it to interfere with
+  reading the website.
+*/
+
+body::before {
+  content: "";
+
+  position: fixed;
+
+  inset: 0;
+
+  background:
+    radial-gradient(
+      circle at 50% 30%,
+      rgba(9, 10, 12, 0.78),
+      rgba(9, 10, 12, 0.94) 75%
+    );
+
+  pointer-events: none;
+
+  z-index: -2;
+}
+
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
+.page {
+  width: min(
+    var(--max-width),
+    calc(100% - 48px)
+  );
+
+  margin: 0 auto;
+}
+
+section {
+  padding: 90px 0;
+
+  border-bottom: 1px solid var(--line);
+
+  scroll-margin-top: 95px;
+}
+
+.section-label {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin-bottom: 30px;
+
+  color: var(--accent);
+
+  font-family: "DM Mono", monospace;
+
+  font-size: 0.72rem;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+}
+
+.section-label::before {
+  content: "";
+
+  width: 25px;
+  height: 1px;
+
+  background: var(--accent);
+}
+
+h2 {
+  font-family: "Manrope", sans-serif;
+
+  font-size: clamp(2rem, 4vw, 3rem);
+
+  line-height: 1.05;
+
+  letter-spacing: -0.045em;
+
+  margin-bottom: 20px;
+}
+
+
+/* =========================================================
+   FIXED NAVIGATION
+   ========================================================= */
+
+nav {
+  height: 78px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  position: fixed;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  z-index: 1000;
+
+  padding-left: max(
+    24px,
+    calc((100vw - var(--max-width)) / 2)
+  );
+
+  padding-right: max(
+    24px,
+    calc((100vw - var(--max-width)) / 2)
+  );
+
+  background:
+    rgba(9, 10, 12, 0.82);
+
+  backdrop-filter: blur(14px);
+
+  -webkit-backdrop-filter: blur(14px);
+
+  border-bottom: 1px solid var(--line);
+}
+
+.logo {
+  font-family: "Manrope", sans-serif;
+
+  font-weight: 800;
+
+  letter-spacing: -0.04em;
+}
+
+.logo span {
+  color: var(--accent);
+}
+
+.nav-links {
+  display: flex;
+
+  gap: 28px;
+
+  color: var(--muted);
+
+  font-size: 0.85rem;
+}
+
+.nav-links a {
+  position: relative;
+
+  color: var(--muted);
+
+  transition:
+    color 0.2s ease;
+}
+
+.nav-links a::after {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+
+  bottom: -8px;
+
+  width: 0;
+
+  height: 1px;
+
+  background: var(--accent);
+
+  transition:
+    width 0.2s ease;
+}
+
+.nav-links a:hover {
+  color: var(--accent);
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero {
+  min-height: 100vh;
+
+  display: flex;
+
+  align-items: center;
+
+  padding: 178px 0 100px;
+
+  border-bottom: 1px solid var(--line);
+}
+
+.hero-content {
+  max-width: 900px;
+}
+
+.eyebrow {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  margin-bottom: 28px;
+
+  color: var(--accent);
+
+  font-family: "DM Mono", monospace;
+
+  font-size: 0.75rem;
+
+  letter-spacing: 0.05em;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: var(--accent);
+
+  box-shadow:
+    0 0 14px
+    rgba(183, 243, 74, 0.7);
+}
+
+.hero h1 {
+  font-family: "Manrope", sans-serif;
+
+  font-size: clamp(3.8rem, 9vw, 8rem);
+
+  line-height: 0.88;
+
+  letter-spacing: -0.075em;
+
+  margin-bottom: 32px;
+}
+
+.hero h1 .accent {
+  color: var(--accent);
+}
+
+.hero-description {
+  max-width: 680px;
+
+  color: var(--muted);
+
+  font-size: clamp(1rem, 2vw, 1.18rem);
+
+  line-height: 1.75;
+
+  margin-bottom: 0;
+}
+
+.hero-description strong {
+  color: var(--text);
+
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.button {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 10px 16px;
+
+  border: 1px solid var(--line);
+
+  border-radius: 5px;
+
+  font-size: 0.84rem;
+
+  transition:
+    all 0.2s ease;
+}
+
+.button:hover {
+  border-color: var(--accent);
+
+  color: var(--accent);
+
+  transform: translateY(-2px);
+}
+
+.button.primary {
+  background: var(--accent);
+
+  color: #080a06;
+
+  border-color: var(--accent);
+
+  font-weight: 700;
+}
+
+.button.primary:hover {
+  color: #080a06;
+
+  box-shadow:
+    0 8px 30px
+    rgba(183, 243, 74, 0.14);
+}
+
+
+/* =========================================================
+   EDUCATION
+   ========================================================= */
+
+.education {
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 40px;
+
+  padding: 28px 0;
+
+  border-top: 1px solid var(--line);
+
+  border-bottom: 1px solid var(--line);
+
+  margin-top: 35px;
+}
+
+.education-main h2 {
+  font-family: "Manrope", sans-serif;
+
+  font-size: 1.25rem;
+
+  margin-bottom: 4px;
+}
+
+.education-degree {
+  color: var(--accent);
+
+  font-family: "DM Mono", monospace;
+
+  font-size: 0.7rem;
+
+  margin-bottom: 7px;
+}
+
+.university {
+  color: var(--muted);
+
+  font-size: 0.86rem;
+}
+
+.education-date {
+  color: var(--muted);
+
+  font-size: 0.82rem;
+
+  white-space: nowrap;
+}
+
+.coursework {
+  display: grid;
+
+  grid-template-columns: 150px 1fr;
+
+  gap: 25px;
+
+  padding-top: 22px;
+
+  color: var(--muted);
+
+  font-size: 0.84rem;
+
+  line-height: 1.7;
+}
+
+.coursework-label {
+  color: var(--text);
+
+  font-family: "DM Mono", monospace;
+
+  font-size: 0.68rem;
+
+  text-transform: uppercase;
+}
+
+
+/* =========================================================
+   RESEARCH
+   ========================================================= */
+
+.research-list {
+  margin-top: 40px;
+
+  border-top: 1px solid var(--line);
+}
+
+.research-item {
+  display: grid;
+
+  grid-template-columns: 120px 1fr;
+
+  gap: 30px;
+
+  padding: 28px 0;
+
+  border-bottom: 1px solid var(--line);
+}
+
+.research-year {
+  color: var(--subtle);
+
+  font-family: "DM Mono", monospace;
+
+  font-size: 0.72rem;
+
+  padding-top: 4px;
+}
+
+.research-title {
+  font-family: "Manrope", sans-serif;
+
+  font-size: 1.15rem;
+
+  font-weight: 700;
+
+  letter-spacing: -0.02em;
+
+  margin-bottom: 7px;
+}
+
+.research-description {
+  color: var(--muted);
+
+  max-width: 750px;
+
+  font-size: 0.9rem;
+
+  margin-bottom: 10px;
+}
+
+.research-links {
+  display: flex;
+
+  gap: 16px;
+
+  flex-wrap: wrap;
+}
+
+.text-link {
+  color: var(--accent);
+
+  font-family: "DM Mono", monospace;
+
+  font-size: 0.67rem;
+}
+
+.text-link:hover {
+  opacity: 0.65;
+}
+
+
+/* =========================================================
+   EXPERIENCE TIMELINE
+   ========================================================= */
+
+.timeline {
+  position: relative;
+
+  margin-top: 45px;
+
+  padding-left: 35px;
+}
+
+.timeline::before {
+  content: "";
+
+  position: absolute;
+
+  left: 6px;
+
+  top: 5px;
+
+  bottom: 5px;
+
+  width: 1px;
+
+  background: var(--line);
+}
+
+.timeline-item {
+  position: relative;
+
+  padding: 0 0 42px;
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline-marker {
+  position: absolute;
+
+  left: -35px;
+
+  top: 5px;
+
+  width: 13px;
+  height: 13px;
+
+  border: 2px solid var(--accent);
+
+  border-radius: 50%;
+
+  background: var(--bg);
+
+  box-shadow:
+    0 0 0 5px var(--bg);
+}
+
+.timeline-date {
+  color: var(--subtle);
+
+  font-family: "DM Mono", monospace;
+
+  font-size: 0.68rem;
+
+  margin-bottom: 5px;
+}
+
+.timeline-content h3 {
+  font-family: "Manrope", sans-serif;
+
+  font-size: 1.15rem;
+
+  margin-bottom: 2px;
+}
+
+.company {
+  color: var(--accent);
+
+  font-size: 0.9rem;
+}
+
+.location {
+  color: var(--muted);
+
+  font-size: 0.78rem;
+
+  margin-top: 1px;
+}
+
+
+/* =========================================================
+   PROJECTS
+   ========================================================= */
+
+.projects-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 15px;
+
+  margin-top: 40px;
+}
+
+.project-card {
+  background: var(--card);
+
+  border: 1px solid var(--line);
+
+  padding: 28px;
+
+  transition:
+    border-color 0.25s ease,
+    transform 0.25s ease,
+    background 0.25s ease;
+}
+
+.project-card:hover {
+  border-color: #3c414c;
+
+  background: var(--card-hover);
+
+  transform: translateY(-3px);
+}
+
+.project-number {
+  color: var(--accent);
+
+  font-family: "DM Mono", monospace;
+
+  font-size: 0.68rem;
+}
+
+.project-card h3 {
+  font-family: "Manrope", sans-serif;
+
+  font-size: 1.25rem;
+
+  margin: 20px 0 7px;
+}
+
+.project-date {
+  color: var(--subtle);
+
+  font-family: "DM Mono", monospace;
+
+  font-size: 0.67rem;
+
+  margin-bottom: 15px;
+}
+
+.project-award {
+  color: var(--text) !important;
+
+  font-weight: 600;
+
+  margin-bottom: 8px;
+}
+
+.project-card p {
+  color: var(--muted);
+
+  font-size: 0.88rem;
+
+  line-height: 1.65;
+}
+
+
+/* =========================================================
+   HONORS
+   ========================================================= */
+
+.honors-list {
+  margin-top: 35px;
+
+  border-top: 1px solid var(--line);
+}
+
+.honor {
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 30px;
+
+  padding: 19px 0;
+
+  border-bottom: 1px solid var(--line);
+}
+
+.honor-title {
+  font-size: 0.9rem;
+}
+
+.honor-date {
+  color: var(--subtle);
+
+  font-family: "DM Mono", monospace;
+
+  font-size: 0.68rem;
+
+  white-space: nowrap;
+}
+
+.honor-description {
+  color: var(--muted);
+
+  font-size: 0.82rem;
+
+  margin-top: 3px;
+}
+
+
+/* =========================================================
+   CONTACT
+   ========================================================= */
+
+.contact {
+  text-align: center;
+
+  padding: 120px 0;
+
+  border-bottom: none;
+}
+
+.contact .section-label {
+  justify-content: center;
+}
+
+.contact h2 {
+  margin-bottom: 28px;
+}
+
+.contact-links {
+  display: flex;
+
+  justify-content: center;
+
+  flex-wrap: wrap;
+
+  gap: 10px;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+footer {
+  border-top: 1px solid var(--line);
+
+  padding: 23px 0 32px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  color: var(--subtle);
+
+  font-family: "DM Mono", monospace;
+
+  font-size: 0.65rem;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 800px) {
+
+  .page {
+    width: min(
+      100% - 30px,
+      var(--max-width)
+    );
+  }
+
+  nav {
+    height: 68px;
+
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  section {
+    padding: 70px 0;
+
+    scroll-margin-top: 80px;
+  }
+
+  .hero {
+    min-height: 100vh;
+
+    padding: 140px 0 80px;
+  }
+
+  .education {
+    flex-direction: column;
+
+    gap: 12px;
+  }
+
+  .education-date {
+    white-space: normal;
+  }
+
+  .coursework {
+    grid-template-columns: 1fr;
+
+    gap: 7px;
+  }
+
+  .research-item {
+    grid-template-columns: 1fr;
+
+    gap: 7px;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .honor {
+    flex-direction: column;
+
+    gap: 4px;
+  }
+
+  footer {
+    flex-direction: column;
+
+    gap: 8px;
+  }
+}
+
+
+@media (max-width: 480px) {
+
+  .page {
+    width: calc(100% - 28px);
+  }
+
+  .hero h1 {
+    font-size: 3.5rem;
+  }
+
+  .timeline {
+    padding-left: 30px;
+  }
+
+  .timeline-marker {
+    left: -30px;
+  }
+}
